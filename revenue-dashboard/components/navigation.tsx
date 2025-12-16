@@ -3,9 +3,10 @@
 import { useTheme } from "@/components/theme-provider";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { BarChart3, Moon, PlusCircle, Sun, TrendingUp } from "lucide-react";
+import { BarChart3, LogOut, Moon, PlusCircle, Sun, TrendingUp } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { signOut } from "@/app/login/actions";
 
 const navigation = [
   { name: "Dashboard", href: "/", icon: BarChart3 },
@@ -49,7 +50,7 @@ export function Navigation() {
             </div>
           </div>
 
-          <div className="flex items-center">
+          <div className="flex items-center space-x-2">
             <Button
               variant="ghost"
               size="icon"
@@ -59,6 +60,15 @@ export function Navigation() {
               <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
               <Moon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
               <span className="sr-only">Toggle theme</span>
+            </Button>
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => signOut()}
+              className="text-gray-500 dark:text-gray-300 hover:text-gray-700 dark:hover:text-gray-100"
+            >
+              <LogOut className="h-[1.2rem] w-[1.2rem]" />
+              <span className="sr-only">Esci</span>
             </Button>
           </div>
         </div>

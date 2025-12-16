@@ -1,7 +1,8 @@
 "use client";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Revenue, supabase } from "@/lib/supabase";
+import { Revenue } from "@/lib/supabase";
+import { createClient } from "@/lib/supabase/client";
 import { format, subDays } from "date-fns";
 import { useEffect, useState } from "react";
 import {
@@ -49,6 +50,7 @@ export function RevenueCharts() {
 
   const loadChartData = async () => {
     try {
+      const supabase = createClient();
       const thirtyDaysAgo = format(subDays(new Date(), 30), "yyyy-MM-dd");
 
       const { data, error } = await supabase
@@ -79,7 +81,7 @@ export function RevenueCharts() {
 
         // Calculate pie chart data (totals by category)
         const totals = data.reduce(
-          (acc, item) => {
+          (acc: any, item: any) => {
             acc.biliardi += item.biliardi;
             acc.bowling_time += item.bowling_time;
             acc.bowling_game += item.bowling_game;

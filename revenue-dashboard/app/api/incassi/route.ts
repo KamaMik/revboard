@@ -1,15 +1,15 @@
-import { supabase } from "@/lib/supabase";
-import { supabaseAdmin } from "@/lib/supabase-admin";
+import { createClient } from "@/lib/supabase/server";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(request: NextRequest) {
   try {
+    const supabase = await createClient();
     const { searchParams } = new URL(request.url);
     const dateFrom = searchParams.get("dateFrom");
     const dateTo = searchParams.get("dateTo");
     const categories = searchParams.get("categories")?.split(",") || [];
 
-    let query = (supabaseAdmin ?? supabase).from("incassi").select("*");
+    let query = supabase.from("incassi").select("*");
 
     if (dateFrom) {
       query = query.gte("data", dateFrom);
@@ -38,10 +38,22 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
+    const supabase = await createClient();
+    
+    // Debug: Check user status
+    const { data: { user }, error: userError } = await supabase.auth.getUser();
+    if (user) {
+      console.log("User detected:", user.id);
+      console.log("App Metadata:", user.app_metadata);
+      console.log("Role:", user.role);
+    } else {
+      console.log("No user found in session");
+    }
+
     const body = await request.json();
 
     // Check if data exists for this date
-    const { data: existingData } = await (supabaseAdmin ?? supabase)
+    const { data: existingData } = await supabase
       .from("incassi")
       .select("id")
       .eq("data", body.data)
@@ -49,7 +61,7 @@ export async function POST(request: NextRequest) {
 
     if (existingData) {
       // Update existing record
-      const { data, error } = await (supabaseAdmin ?? supabase)
+      const { data, error } = await supabase
         .from("incassi")
         .update(body)
         .eq("id", existingData.id)
@@ -65,7 +77,7 @@ export async function POST(request: NextRequest) {
       });
     } else {
       // Insert new record
-      const { data, error } = await (supabaseAdmin ?? supabase)
+      const { data, error } = await supabase
         .from("incassi")
         .insert([body])
         .select();

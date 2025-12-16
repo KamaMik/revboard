@@ -1,8 +1,9 @@
+export const dynamic = "force-dynamic";
+
 import { KPICards } from "@/components/kpi-cards";
 import { RevenueCharts } from "@/components/revenue-charts";
 import { RevenueForm } from "@/components/revenue-form";
-import { supabase } from "@/lib/supabase";
-import { supabaseAdmin } from "@/lib/supabase-admin";
+import { createClient } from "@/lib/supabase/server";
 import {
   endOfMonth,
   endOfYear,
@@ -20,7 +21,7 @@ async function getDashboardData() {
     const yearEnd = format(endOfYear(new Date()), "yyyy-MM-dd");
 
     // Get today's data
-    const client = supabaseAdmin ?? supabase;
+    const client = await createClient();
     const { data: todayData } = await client
       .from("incassi")
       .select("*")
@@ -51,7 +52,7 @@ async function getDashboardData() {
 
     const monthlyTotal =
       monthlyData?.reduce(
-        (sum, item) =>
+        (sum: number, item) =>
           sum +
           item.biliardi +
           item.bowling_time +
@@ -63,7 +64,7 @@ async function getDashboardData() {
 
     const yearlyTotal =
       yearlyData?.reduce(
-        (sum, item) =>
+        (sum: number, item) =>
           sum +
           item.biliardi +
           item.bowling_time +

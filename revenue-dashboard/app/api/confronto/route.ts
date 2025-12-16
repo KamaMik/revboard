@@ -1,5 +1,4 @@
-import { supabase } from "@/lib/supabase";
-import { supabaseAdmin } from "@/lib/supabase-admin";
+import { createClient } from "@/lib/supabase/server";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(request: NextRequest) {
@@ -18,7 +17,7 @@ export async function GET(request: NextRequest) {
     );
   }
 
-  const client = supabaseAdmin ?? supabase;
+  const client = await createClient();
   const categories = [
     "biliardi",
     "bowling_time",

@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { supabase } from "@/lib/supabase";
+import { createClient } from "@/lib/supabase/server";
 import { format } from "date-fns";
 
 export async function GET() {
@@ -7,6 +7,7 @@ export async function GET() {
   const hasAnon = !!process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
   try {
+    const supabase = await createClient();
     const { error, count } = await supabase
       .from("incassi")
       .select("id", { count: "exact", head: true });
@@ -38,6 +39,7 @@ export async function POST() {
   };
 
   try {
+    const supabase = await createClient();
     const { data, error } = await supabase
       .from("incassi")
       .upsert(payload, { onConflict: "data" })

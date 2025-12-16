@@ -3,7 +3,8 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { DatePicker } from "@/components/ui/date-picker";
-import { RevenueInsert, supabase } from "@/lib/supabase";
+import { RevenueInsert } from "@/lib/supabase";
+import { createClient } from "@/lib/supabase/client";
 import { format } from "date-fns";
 import { useEffect, useState } from "react";
 
@@ -32,6 +33,7 @@ export function RevenueForm({ onSuccess, selectedDate }: RevenueFormProps) {
 
   const loadExistingData = async (date: string) => {
     try {
+      const supabase = createClient();
       const { data, error } = await supabase
         .from("incassi")
         .select("*")

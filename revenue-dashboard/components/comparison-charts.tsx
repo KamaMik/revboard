@@ -1,7 +1,8 @@
 "use client";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Revenue, supabase } from "@/lib/supabase";
+import { Revenue } from "@/lib/supabase";
+import { createClient } from "@/lib/supabase/client";
 import { useEffect, useState } from "react";
 import {
   Bar,
@@ -40,6 +41,7 @@ export function ComparisonCharts({ periodA, periodB }: PeriodComparisonProps) {
 
   const loadComparisonData = async () => {
     try {
+      const supabase = createClient();
       // Load data for both periods
       const [dataA, dataB] = await Promise.all([
         supabase
@@ -74,12 +76,12 @@ export function ComparisonCharts({ periodA, periodB }: PeriodComparisonProps) {
       const comparisonData: ComparisonData[] = categories.map((category) => {
         const totalA =
           dataA.data?.reduce(
-            (sum, item) => sum + (item[category as keyof Revenue] as number),
+            (sum: number, item: any) => sum + (item[category as keyof Revenue] as number),
             0
           ) || 0;
         const totalB =
           dataB.data?.reduce(
-            (sum, item) => sum + (item[category as keyof Revenue] as number),
+            (sum: number, item: any) => sum + (item[category as keyof Revenue] as number),
             0
           ) || 0;
         const difference = totalA - totalB;

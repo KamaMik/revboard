@@ -44,7 +44,7 @@ export default function AnalyticsPage() {
             filteredItem[category] = item[category as keyof Revenue];
           });
           filteredItem.total = currentFilters.categories.reduce(
-            (sum, category) =>
+            (sum: number, category: string) =>
               sum + (item[category as keyof Revenue] as number),
             0
           );
@@ -52,7 +52,7 @@ export default function AnalyticsPage() {
         });
 
         // Calculate KPIs
-        const total = filteredData.reduce((sum, item) => sum + item.total, 0);
+        const total = filteredData.reduce((sum: number, item: any) => sum + item.total, 0);
         const average = total / (filteredData.length || 1);
 
         setKpiData({
