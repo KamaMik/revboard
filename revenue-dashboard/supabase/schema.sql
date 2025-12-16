@@ -17,22 +17,22 @@ CREATE INDEX idx_incassi_data ON public.incassi(data);
 -- Enable Row Level Security
 ALTER TABLE public.incassi ENABLE ROW LEVEL SECURITY;
 
--- Create policies for authenticated users
+-- Create policies for all users (including anon for API access)
 CREATE POLICY "Allow read access for all users" ON public.incassi
     FOR SELECT USING (true);
 
-CREATE POLICY "Allow insert for authenticated users" ON public.incassi
+CREATE POLICY "Allow insert for all users" ON public.incassi
     FOR INSERT WITH CHECK (true);
 
-CREATE POLICY "Allow update for authenticated users" ON public.incassi
+CREATE POLICY "Allow update for all users" ON public.incassi
     FOR UPDATE USING (true);
 
-CREATE POLICY "Allow delete for authenticated users" ON public.incassi
+CREATE POLICY "Allow delete for all users" ON public.incassi
     FOR DELETE USING (true);
 
 -- Grant permissions
 GRANT ALL ON public.incassi TO authenticated;
-GRANT SELECT ON public.incassi TO anon;
+GRANT ALL ON public.incassi TO anon;
 
 -- Create function to update updated_at timestamp
 CREATE OR REPLACE FUNCTION update_updated_at_column()

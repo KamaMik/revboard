@@ -207,14 +207,14 @@ export function ComparisonCharts({ periodA, periodB }: PeriodComparisonProps) {
                 <LabelList
                   dataKey="periodA"
                   position="top"
-                  formatter={(value: number) => `€${Number(value).toFixed(0)}`}
+                  formatter={(value: any) => `€${Number(value).toFixed(0)}`}
                 />
               </Bar>
               <Bar dataKey="periodB" fill="#10b981" name={periodB.label}>
                 <LabelList
                   dataKey="periodB"
                   position="top"
-                  formatter={(value: number) => `€${Number(value).toFixed(0)}`}
+                  formatter={(value: any) => `€${Number(value).toFixed(0)}`}
                 />
               </Bar>
             </BarChart>
@@ -250,7 +250,7 @@ export function ComparisonCharts({ periodA, periodB }: PeriodComparisonProps) {
                 <LabelList
                   dataKey="difference"
                   position="top"
-                  formatter={(value: number) => `€${Number(value).toFixed(0)}`}
+                  formatter={(value: any) => `€${Number(value).toFixed(0)}`}
                 />
               </Line>
             </LineChart>
