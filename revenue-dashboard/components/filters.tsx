@@ -96,7 +96,7 @@ export function Filters({ onFiltersChange }: FiltersProps) {
   return (
     <div className="bg-gray-100 p-6 rounded-lg shadow-lg border border-gray-300 text-gray-800 space-y-6 dark:bg-gray-800 dark:border-gray-700 dark:text-white">
       <div>
-        <h3 className="text-lg font-semibold text-gray-800 mb-4">Filtri</h3>
+        <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-4">Filtri</h3>
 
         {/* Date Presets */}
         <div className="mb-4">

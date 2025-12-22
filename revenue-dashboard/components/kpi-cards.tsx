@@ -12,17 +12,19 @@ interface KPICardProps {
 function KPICard({ title, value, change, changeType, icon }: KPICardProps) {
   return (
     <Card className="hover:shadow-lg transition-shadow duration-200">
-      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-        <CardTitle className="text-sm font-medium text-muted-foreground">
+      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 px-4 pt-4">
+        <CardTitle className="text-xs font-medium text-gray-500 dark:text-gray-200 uppercase tracking-wider">
           {title}
         </CardTitle>
         {icon}
       </CardHeader>
-      <CardContent>
-        <div className="text-2xl font-bold">{value}</div>
+      <CardContent className="px-4 pb-4">
+        <div className="text-xl md:text-2xl font-bold truncate" title={value}>
+          {value}
+        </div>
         {change && (
           <div
-            className={`flex items-center text-xs mt-1 ${
+            className={`flex items-center text-[10px] md:text-xs mt-1 ${
               changeType === "positive" ? "text-green-600" : "text-red-600"
             }`}
           >

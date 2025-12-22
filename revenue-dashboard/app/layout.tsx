@@ -1,4 +1,4 @@
-import { Navigation } from "@/components/navigation";
+import { SidebarNav } from "@/components/sidebar";
 import { ThemeProvider } from "@/components/theme-provider";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
@@ -25,8 +25,12 @@ export default function RootLayout({
           defaultTheme="system"
           storageKey="revenue-dashboard-theme"
         >
-          <Navigation />
-          <main className="min-h-screen ">{children}</main>
+          <div className="flex">
+            <SidebarNav />
+            <main className="min-h-screen flex-1 transition-all duration-300 ease-in-out">
+              {children}
+            </main>
+          </div>
         </ThemeProvider>
       </body>
     </html>

@@ -105,7 +105,7 @@ export function RevenueForm({ onSuccess, selectedDate }: RevenueFormProps) {
 
   return (
     <div className="w-full max-w-2xl mx-auto p-6 bg-white text-gray-800 rounded-lg shadow-lg border border-gray-200 dark:bg-gray-800 dark:text-white dark:border-gray-700">
-      <h2 className="text-2xl font-bold mb-6 text-gray-800">
+      <h2 className="text-2xl font-bold mb-6 text-gray-800 dark:text-gray-200">
         Inserimento Incassi Giornalieri
       </h2>
 

@@ -11,7 +11,7 @@ export default async function LoginPage({
     <div className="flex min-h-screen flex-col items-center justify-center bg-slate-100 dark:bg-gray-900">
       <div className="w-full max-w-md space-y-8 rounded-lg bg-white p-6 shadow-md dark:bg-gray-800">
         <div>
-          <h2 className="mt-6 text-center text-3xl font-bold tracking-tight text-gray-900 dark:text-white">
+          <h2 className="mt-6 text-center text-3xl font-bold tracking-tight text-gray-900 dark:text-gray-200">
             Accedi a RevBoard
           </h2>
           {error && (
