@@ -45,7 +45,7 @@ const SidebarRoot = React.forwardRef<HTMLDivElement, SidebarRootProps>(
       <div
         ref={ref}
         className={cn(
-          "relative flex-shrink-0 group",
+          "relative shrink-0 group",
           className
         )}
         onMouseEnter={() => setIsOpen(true)}
@@ -65,7 +65,7 @@ interface SidebarProps {
   expandedWidth?: string;
 }
 
-const Sidebar = React.forwardRef<HTMLAsideElement, SidebarProps>(
+const Sidebar = React.forwardRef<HTMLElement, SidebarProps>(
   (
     {
       children,
@@ -163,7 +163,7 @@ const SidebarMenuItem = React.forwardRef<HTMLButtonElement, SidebarMenuItemProps
           className
         )}
       >
-        <div className="flex-shrink-0">{icon}</div>
+        <div className="shrink-0">{icon}</div>
         <div
           className={cn(
             "transition-opacity duration-300 overflow-hidden flex-1 text-left",
@@ -219,7 +219,7 @@ const SidebarFooterButton = React.forwardRef<
       )}
       {...props}
     >
-      <div className="flex-shrink-0">{icon}</div>
+      <div className="shrink-0">{icon}</div>
       <div
         className={cn(
           "transition-opacity duration-300 overflow-hidden flex-1 text-left",
