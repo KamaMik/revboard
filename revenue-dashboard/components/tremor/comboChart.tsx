@@ -137,7 +137,7 @@ const LegendItem = ({
           // base
           "truncate text-xs whitespace-nowrap",
           // text color
-          "text-gray-700 dark:text-gray-300",
+          "text-gray-700 dark:text-gray-200",
           hasOnValueChange &&
             "group-hover:text-gray-900 dark:group-hover:text-gray-50",
           activeLegend && activeLegend !== name ? "opacity-40" : "opacity-100",
@@ -527,7 +527,7 @@ const ChartTooltip = ({
                       // base
                       "text-right whitespace-nowrap",
                       // text color
-                      "text-gray-700 dark:text-gray-300",
+                      "text-gray-700 dark:text-gray-200",
                     )}
                   >
                     {category}
@@ -822,7 +822,7 @@ const ComboChart = React.forwardRef<HTMLDivElement, ComboChartProps>(
                 // base
                 "mt-4 text-xs",
                 // text fill
-                "fill-gray-500 dark:fill-gray-500",
+                "fill-gray-500 dark:fill-gray-200",
               )}
               tickLine={false}
               axisLine={false}
@@ -861,7 +861,7 @@ const ComboChart = React.forwardRef<HTMLDivElement, ComboChartProps>(
                 // base
                 "text-xs",
                 // text fill
-                "fill-gray-500 dark:fill-gray-500",
+                "fill-gray-500 dark:fill-gray-200",
               )}
               tick={{
                 transform: "translate(-3, 0)",
@@ -898,7 +898,7 @@ const ComboChart = React.forwardRef<HTMLDivElement, ComboChartProps>(
                   // base
                   "text-xs",
                   // text fill
-                  "fill-gray-500 dark:fill-gray-500",
+                  "fill-gray-500 dark:fill-gray-200",
                 )}
                 tick={{
                   transform: "translate(3, 0)",

@@ -3,6 +3,8 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { DatePicker } from "@/components/ui/date-picker";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Label } from "@/components/ui/label";
 import { RevenueInsert } from "@/lib/supabase";
 import { createClient } from "@/lib/supabase/client";
 import { format } from "date-fns";
@@ -104,151 +106,129 @@ export function RevenueForm({ onSuccess, selectedDate }: RevenueFormProps) {
     formData.calcetto;
 
   return (
-    <div className="w-full max-w-2xl mx-auto p-6 bg-white text-gray-800 rounded-lg shadow-lg border border-gray-200 dark:bg-gray-800 dark:text-white dark:border-gray-700">
-      <h2 className="text-2xl font-bold mb-6 text-gray-800 dark:text-gray-200">
-        Inserimento Incassi Giornalieri
-      </h2>
-
-      <form onSubmit={handleSubmit} className="space-y-6">
-        <div>
-          <label
-            htmlFor="data"
-            className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2"
-          >
-            Data
-          </label>
-          <DatePicker
-            id="data"
-            value={formData.data}
-            onChange={(val) =>
-              setFormData((prev) => ({ ...prev, data: val }))
-            }
-          />
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div>
-            <label
-              htmlFor="biliardi"
-              className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2"
-            >
-              Biliardi (€)
-            </label>
-            <Input
-              id="biliardi"
-              type="number"
-              step="0.01"
-              value={formData.biliardi}
-              onChange={(e) => handleInputChange("biliardi", e.target.value)}
-              className="w-full"
-              min="0"
-            />
-          </div>
-
-          <div>
-            <label
-              htmlFor="bowling_time"
-              className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2"
-            >
-              Bowling Time (€)
-            </label>
-            <Input
-              id="bowling_time"
-              type="number"
-              step="0.01"
-              value={formData.bowling_time}
-              onChange={(e) =>
-                handleInputChange("bowling_time", e.target.value)
+    <Card className="w-full max-w-2xl mx-auto shadow-lg">
+      <CardHeader>
+        <CardTitle className="text-2xl font-bold text-gray-800 dark:text-gray-200">
+          Inserimento Incassi Giornalieri
+        </CardTitle>
+      </CardHeader>
+      <CardContent>
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <div className="space-y-2">
+            <Label htmlFor="data">Data</Label>
+            <DatePicker
+              id="data"
+              value={formData.data}
+              onChange={(val) =>
+                setFormData((prev) => ({ ...prev, data: val }))
               }
-              className="w-full"
-              min="0"
             />
           </div>
 
-          <div>
-            <label
-              htmlFor="bowling_game"
-              className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2"
-            >
-              Bowling Game (€)
-            </label>
-            <Input
-              id="bowling_game"
-              type="number"
-              step="0.01"
-              value={formData.bowling_game}
-              onChange={(e) =>
-                handleInputChange("bowling_game", e.target.value)
-              }
-              className="w-full"
-              min="0"
-            />
-          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <Label htmlFor="biliardi">Biliardi (€)</Label>
+              <Input
+                id="biliardi"
+                type="number"
+                step="0.01"
+                value={formData.biliardi || ""}
+                onChange={(e) => handleInputChange("biliardi", e.target.value)}
+                className="w-full"
+                min="0"
+                placeholder="0.00"
+              />
+            </div>
 
-          <div>
-            <label
-              htmlFor="bar"
-              className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2"
-            >
-              Bar (€)
-            </label>
-            <Input
-              id="bar"
-              type="number"
-              step="0.01"
-              value={formData.bar}
-              onChange={(e) => handleInputChange("bar", e.target.value)}
-              className="w-full"
-              min="0"
-            />
-          </div>
+            <div className="space-y-2">
+              <Label htmlFor="bowling_time">Bowling Time (€)</Label>
+              <Input
+                id="bowling_time"
+                type="number"
+                step="0.01"
+                value={formData.bowling_time || ""}
+                onChange={(e) =>
+                  handleInputChange("bowling_time", e.target.value)
+                }
+                className="w-full"
+                min="0"
+                placeholder="0.00"
+              />
+            </div>
 
-          <div>
-            <label
-              htmlFor="calcetto"
-              className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2"
-            >
-              Calcetto (€)
-            </label>
-            <Input
-              id="calcetto"
-              type="number"
-              step="0.01"
-              value={formData.calcetto}
-              onChange={(e) => handleInputChange("calcetto", e.target.value)}
-              className="w-full"
-              min="0"
-            />
-          </div>
+            <div className="space-y-2">
+              <Label htmlFor="bowling_game">Bowling Game (€)</Label>
+              <Input
+                id="bowling_game"
+                type="number"
+                step="0.01"
+                value={formData.bowling_game || ""}
+                onChange={(e) =>
+                  handleInputChange("bowling_game", e.target.value)
+                }
+                className="w-full"
+                min="0"
+                placeholder="0.00"
+              />
+            </div>
 
-          <div className="md:col-span-2">
-            <div className="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
-              <div className="text-sm font-medium text-gray-700 dark:text-gray-200">
-                Totale Giornaliero
-              </div>
-              <div className="text-2xl font-bold text-green-500 dark:text-green-400">
-                €{total.toFixed(2)}
+            <div className="space-y-2">
+              <Label htmlFor="bar">Bar (€)</Label>
+              <Input
+                id="bar"
+                type="number"
+                step="0.01"
+                value={formData.bar || ""}
+                onChange={(e) => handleInputChange("bar", e.target.value)}
+                className="w-full"
+                min="0"
+                placeholder="0.00"
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="calcetto">Calcetto (€)</Label>
+              <Input
+                id="calcetto"
+                type="number"
+                step="0.01"
+                value={formData.calcetto || ""}
+                onChange={(e) => handleInputChange("calcetto", e.target.value)}
+                className="w-full"
+                min="0"
+                placeholder="0.00"
+              />
+            </div>
+
+            <div className="md:col-span-2">
+              <div className="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg flex items-center justify-between">
+                <span className="text-sm font-medium text-gray-700 dark:text-gray-200">
+                  Totale Giornaliero
+                </span>
+                <span className="text-2xl font-bold text-green-500 dark:text-green-400">
+                  €{total.toFixed(2)}
+                </span>
               </div>
             </div>
           </div>
-        </div>
 
-        {message && (
-          <div
-            className={`p-3 rounded-lg ${
-              message.includes("Errore")
-                ? "bg-red-100 text-red-700"
-                : "bg-green-100 text-green-700"
-            }`}
-          >
-            {message}
-          </div>
-        )}
+          {message && (
+            <div
+              className={`p-3 rounded-lg text-sm font-medium ${
+                message.includes("Errore")
+                  ? "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400"
+                  : "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400"
+              }`}
+            >
+              {message}
+            </div>
+          )}
 
-        <Button type="submit" disabled={loading} className="w-full">
-          {loading ? "Salvataggio..." : "Salva Dati"}
-        </Button>
-      </form>
-    </div>
+          <Button type="submit" disabled={loading} className="w-full">
+            {loading ? "Salvataggio..." : "Salva Dati"}
+          </Button>
+        </form>
+      </CardContent>
+    </Card>
   );
 }

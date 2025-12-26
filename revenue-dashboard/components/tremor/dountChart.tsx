@@ -99,7 +99,7 @@ const ChartTooltip = ({
                     // base
                     "text-right whitespace-nowrap",
                     // text color
-                    "text-gray-700 dark:text-gray-300",
+                    "text-gray-700 dark:text-gray-200",
                   )}
                 >
                   {category}
@@ -244,7 +244,7 @@ const DonutChart = React.forwardRef<HTMLDivElement, DonutChartProps>(
           >
             {showLabel && isDonut && (
               <text
-                className="fill-gray-700 dark:fill-gray-300"
+                className="fill-gray-700 dark:fill-gray-200"
                 x="50%"
                 y="50%"
                 textAnchor="middle"

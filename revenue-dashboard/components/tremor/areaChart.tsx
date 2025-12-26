@@ -74,7 +74,7 @@ const LegendItem = ({
           // base
           "truncate text-xs whitespace-nowrap",
           // text color
-          "text-gray-700 dark:text-gray-300",
+          "text-gray-700 dark:text-gray-200",
           hasOnValueChange &&
             "group-hover:text-gray-900 dark:group-hover:text-gray-50",
           activeLegend && activeLegend !== name ? "opacity-40" : "opacity-100",
@@ -693,7 +693,7 @@ const AreaChart = React.forwardRef<HTMLDivElement, AreaChartProps>(
                 // base
                 "text-xs",
                 // text fill
-                "fill-gray-500 dark:fill-gray-500",
+                "fill-gray-500 dark:fill-gray-200",
               )}
               tickLine={false}
               axisLine={false}
@@ -723,7 +723,7 @@ const AreaChart = React.forwardRef<HTMLDivElement, AreaChartProps>(
                 // base
                 "text-xs",
                 // text fill
-                "fill-gray-500 dark:fill-gray-500",
+                "fill-gray-500 dark:fill-gray-200",
               )}
               tickFormatter={
                 type === "percent" ? valueToPercent : valueFormatter
