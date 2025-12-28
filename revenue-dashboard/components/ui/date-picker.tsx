@@ -19,29 +19,33 @@ type DatePickerProps = {
 };
 
 export function DatePicker({ id, value, onChange, className }: DatePickerProps) {
+  const [open, setOpen] = React.useState(false);
   const date = value ? new Date(value) : undefined;
 
   return (
-    <Popover>
+    <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
         <Button
           variant={"outline"}
           className={cn(
-            "w-full justify-start text-left font-normal",
+            "w-full justify-start text-left font-normal truncate",
             !date && "text-muted-foreground",
             className
           )}
           id={id}
         >
           <CalendarIcon className="mr-2 h-4 w-4" />
-          {date ? format(date, "PPP") : <span>Pick a date</span>}
+          {date ? <span className="truncate">{format(date, "PPP")}</span> : <span>Pick a date</span>}
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-auto p-4 min-w-[320px] sm:min-w-[400px]" align="start">
         <Calendar
           mode="single"
           selected={date}
-          onSelect={(d) => onChange(d ? format(d, "yyyy-MM-dd") : "")}
+          onSelect={(d) => {
+            onChange(d ? format(d, "yyyy-MM-dd") : "");
+            setOpen(false);
+          }}
           initialFocus
           className="[--cell-size:3.5rem] w-full max-w-none"
         />

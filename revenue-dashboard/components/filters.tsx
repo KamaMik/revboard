@@ -123,7 +123,7 @@ export function Filters({ onFiltersChange }: FiltersProps) {
         </div>
 
         {/* Custom Date Range */}
-        <div className="grid grid-cols-2 gap-4 mb-4">
+        <div className="flex flex-col gap-4 mb-4">
           <div>
             <label
               htmlFor="dateFrom"

@@ -26,21 +26,22 @@ export function RevenueForm({ onSuccess, selectedDate }: RevenueFormProps) {
   });
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
+  const [selectedTime, setSelectedTime] = useState("12:00");
 
   useEffect(() => {
-    if (selectedDate) {
-      loadExistingData(selectedDate);
+    if (formData.data) {
+      handleDateTimeChange(formData.data, selectedTime);
     }
-  }, [selectedDate]);
+  }, [formData.data, selectedTime]);
 
-  const loadExistingData = async (date: string) => {
+  const handleDateTimeChange = async (date: string, time: string) => {
     try {
       const supabase = createClient();
       const { data, error } = await supabase
         .from("incassi")
         .select("*")
         .eq("data", date)
-        .single();
+        .maybeSingle();
 
       if (data && !error) {
         setFormData({
@@ -50,11 +51,38 @@ export function RevenueForm({ onSuccess, selectedDate }: RevenueFormProps) {
           bowling_game: data.bowling_game,
           bar: data.bar,
           calcetto: data.calcetto,
+          weather_temperature: data.weather_temperature,
+          weather_description: data.weather_description,
+          weather_icon: data.weather_icon,
         });
+        // If data exists, we might want to keep the selected time or reset it?
+        // For now, let's keep the user selected time to allow re-fetching weather if they want.
+      } else {
+        // No data found for this date, fetch weather and reset fields
+        const weatherRes = await fetch(`/api/weather?date=${date}&time=${time}`);
+        const weatherData = await weatherRes.json();
+        
+        setFormData(prev => ({
+          ...prev,
+          data: date,
+          biliardi: 0,
+          bowling_time: 0,
+          bowling_game: 0,
+          bar: 0,
+          calcetto: 0,
+          weather_temperature: weatherData?.weather_temperature,
+          weather_description: weatherData?.weather_description,
+          weather_icon: weatherData?.weather_icon,
+        }));
       }
     } catch (error) {
-      console.error("Error loading existing data:", error);
+      console.error("Error loading data:", error);
     }
+  };
+
+  const loadExistingData = async (date: string) => {
+    // Kept for backward compatibility if needed, but handleDateTimeChange covers it
+    handleDateTimeChange(date, selectedTime);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -114,18 +142,63 @@ export function RevenueForm({ onSuccess, selectedDate }: RevenueFormProps) {
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit} className="space-y-6">
-          <div className="space-y-2">
-            <Label htmlFor="data">Data</Label>
-            <DatePicker
-              id="data"
-              value={formData.data}
-              onChange={(val) =>
-                setFormData((prev) => ({ ...prev, data: val }))
-              }
-            />
+          <div className="flex flex-col md:flex-row gap-4">
+            <div className="space-y-2 flex-1">
+              <Label htmlFor="data">Data</Label>
+              <DatePicker
+                id="data"
+                value={formData.data}
+                onChange={(val) =>
+                  setFormData((prev) => ({ ...prev, data: val }))
+                }
+              />
+            </div>
+            <div className="space-y-2 flex-1">
+              <Label htmlFor="time">Ora</Label>
+              <Input
+                id="time"
+                type="time"
+                value={selectedTime}
+                onChange={(e) => setSelectedTime(e.target.value)}
+                className="w-full"
+              />
+            </div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {formData.weather_description && (
+              <div className="md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-4 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-100 dark:border-blue-800">
+                <div className="space-y-2">
+                   <Label htmlFor="weather_description">Meteo</Label>
+                   <div className="flex gap-2">
+                     {formData.weather_icon && (
+                        <img 
+                          src={formData.weather_icon} 
+                          alt={formData.weather_description}
+                          className="w-10 h-10 rounded self-center"
+                        />
+                     )}
+                     <Input 
+                        id="weather_description"
+                        value={formData.weather_description}
+                        onChange={(e) => setFormData(prev => ({...prev, weather_description: e.target.value}))}
+                        className="flex-1"
+                     />
+                   </div>
+                </div>
+                <div className="space-y-2">
+                   <Label htmlFor="weather_temperature">Temperatura (°C)</Label>
+                   <Input 
+                      id="weather_temperature"
+                      type="number"
+                      step="0.1"
+                      value={formData.weather_temperature}
+                      onChange={(e) => setFormData(prev => ({...prev, weather_temperature: parseFloat(e.target.value) || 0}))}
+                   />
+                </div>
+              </div>
+            )}
+            
             <div className="space-y-2">
               <Label htmlFor="biliardi">Biliardi (€)</Label>
               <Input

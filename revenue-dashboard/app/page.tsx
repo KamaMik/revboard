@@ -3,6 +3,7 @@ export const dynamic = "force-dynamic";
 import { KPICards } from "@/components/kpi-cards";
 import { RevenueCharts } from "@/components/revenue-charts";
 import { RevenueForm } from "@/components/revenue-form";
+import { WeatherWidget } from "@/components/weather-widget";
 import { createClient } from "@/lib/supabase/server";
 import {
   endOfMonth,
@@ -94,6 +95,7 @@ async function getDashboardData() {
 }
 
 export default async function DashboardPage() {
+  // Fetch dashboard data
   const kpiData = await getDashboardData();
 
   return (
@@ -115,6 +117,7 @@ export default async function DashboardPage() {
           </div>
 
           <div className="lg:col-span-1">
+            <WeatherWidget />
             <RevenueForm />
           </div>
         </div>

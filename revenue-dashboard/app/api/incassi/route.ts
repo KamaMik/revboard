@@ -1,5 +1,6 @@
 import { createClient } from "@/lib/supabase/server";
 import { NextRequest, NextResponse } from "next/server";
+import { getWeatherData } from "@/lib/weather";
 
 export async function GET(request: NextRequest) {
   try {
@@ -52,6 +53,10 @@ export async function POST(request: NextRequest) {
 
     const body = await request.json();
 
+    // Fetch weather data
+    const weatherData = await getWeatherData(body.data);
+    const payload = { ...body, ...weatherData };
+
     // Check if data exists for this date
     const { data: existingData } = await supabase
       .from("incassi")
@@ -63,7 +68,7 @@ export async function POST(request: NextRequest) {
       // Update existing record
       const { data, error } = await supabase
         .from("incassi")
-        .update(body)
+        .update(payload)
         .eq("id", existingData.id)
         .select();
 
@@ -79,7 +84,7 @@ export async function POST(request: NextRequest) {
       // Insert new record
       const { data, error } = await supabase
         .from("incassi")
-        .insert([body])
+        .insert([payload])
         .select();
 
       if (error) {
