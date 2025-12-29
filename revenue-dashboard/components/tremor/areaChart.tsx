@@ -406,8 +406,8 @@ const ChartTooltip = ({
               // base
               "font-medium",
               // text color
-              "text-gray-900 dark:text-gray-50",
-            )}
+          "text-gray-900 dark:text-gray-200",
+        )}
           >
             {label}
           </p>
@@ -442,8 +442,8 @@ const ChartTooltip = ({
                   // base
                   "text-right font-medium whitespace-nowrap tabular-nums",
                   // text color
-                  "text-gray-900 dark:text-gray-50",
-                )}
+          "text-gray-900 dark:text-gray-200",
+        )}
               >
                 {valueFormatter(value)}
               </p>
@@ -693,7 +693,7 @@ const AreaChart = React.forwardRef<HTMLDivElement, AreaChartProps>(
                 // base
                 "text-xs",
                 // text fill
-                "fill-gray-500 dark:fill-gray-200",
+                "fill-gray-500 dark:fill-gray-300",
               )}
               tickLine={false}
               axisLine={false}
@@ -723,7 +723,7 @@ const AreaChart = React.forwardRef<HTMLDivElement, AreaChartProps>(
                 // base
                 "text-xs",
                 // text fill
-                "fill-gray-500 dark:fill-gray-200",
+                "fill-gray-500 dark:fill-gray-300",
               )}
               tickFormatter={
                 type === "percent" ? valueToPercent : valueFormatter

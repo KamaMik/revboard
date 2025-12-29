@@ -29,111 +29,75 @@ interface PieData {
   color: string;
 }
 
-export function RevenueCharts() {
+export interface RevenueChartsProps {
+  data: Revenue[];
+  periodLabel: string;
+  activeCategories: string[];
+}
+
+const CATEGORY_CONFIG: Record<string, { label: string; color: string; tremorColor: string }> = {
+  biliardi: { label: "Biliardi", color: "#3b82f6", tremorColor: "blue" },
+  bowling_time: { label: "Bowling Time", color: "#10b981", tremorColor: "emerald" },
+  bowling_game: { label: "Bowling Game", color: "#f59e0b", tremorColor: "amber" },
+  bar: { label: "Bar", color: "#ef4444", tremorColor: "pink" },
+  calcetto: { label: "Calcetto", color: "#8b5cf6", tremorColor: "violet" },
+};
+
+export function RevenueCharts({ data, periodLabel, activeCategories }: RevenueChartsProps) {
   const [chartData, setChartData] = useState<ChartData[]>([]);
   const [pieData, setPieData] = useState<PieData[]>([]);
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    loadChartData();
-  }, []);
-
-  const loadChartData = async () => {
-    try {
-      const supabase = createClient();
-      const thirtyDaysAgo = format(subDays(new Date(), 30), "yyyy-MM-dd");
-
-      const { data, error } = await supabase
-        .from("incassi")
-        .select("*")
-        .gte("data", thirtyDaysAgo)
-        .order("data", { ascending: true });
-
-      if (error) throw error;
-
-      if (data) {
-        const chartData = data.map((item: Revenue) => ({
-          date: format(new Date(item.data), "dd/MM"),
-          total:
-            item.biliardi +
-            item.bowling_time +
-            item.bowling_game +
-            item.bar +
-            item.calcetto,
-          biliardi: item.biliardi,
-          bowling_time: item.bowling_time,
-          bowling_game: item.bowling_game,
-          bar: item.bar,
-          calcetto: item.calcetto,
-        }));
-
-        setChartData(chartData);
-
-        // Calculate pie chart data (totals by category)
-        const totals = data.reduce(
-          (acc: any, item: any) => {
-            acc.biliardi += item.biliardi;
-            acc.bowling_time += item.bowling_time;
-            acc.bowling_game += item.bowling_game;
-            acc.bar += item.bar;
-            acc.calcetto += item.calcetto;
-            return acc;
-          },
-          { biliardi: 0, bowling_time: 0, bowling_game: 0, bar: 0, calcetto: 0 }
-        );
-
-        const pieData: PieData[] = [
-          { name: "Biliardi", value: totals.biliardi, color: "#3b82f6" },
-          {
-            name: "Bowling Time",
-            value: totals.bowling_time,
-            color: "#10b981",
-          },
-          {
-            name: "Bowling Game",
-            value: totals.bowling_game,
-            color: "#f59e0b",
-          },
-          { name: "Bar", value: totals.bar, color: "#ef4444" },
-          { name: "Calcetto", value: totals.calcetto, color: "#8b5cf6" },
-        ];
-
-        setPieData(pieData);
-      }
-    } catch (error) {
-      console.error("Error loading chart data:", error);
-    } finally {
-      setLoading(false);
+    if (data) {
+      processData();
     }
+  }, [data, activeCategories]);
+
+  const processData = () => {
+    // Process Area/Combo Chart Data
+    const processedChartData = data.map((item: Revenue) => {
+      const formattedItem: any = {
+        date: format(new Date(item.data), "dd/MM"),
+        weather_description: item.weather_description,
+        weather_temperature: item.weather_temperature,
+        weather_icon: item.weather_icon,
+      };
+
+      let total = 0;
+      activeCategories.forEach((cat) => {
+        const val = item[cat as keyof Revenue] as number;
+        formattedItem[cat] = val;
+        total += val;
+      });
+      formattedItem.total = total;
+
+      return formattedItem as ChartData;
+    });
+
+    setChartData(processedChartData);
+
+    // Process Pie Chart Data
+    const totals = data.reduce(
+      (acc: any, item: any) => {
+        activeCategories.forEach((cat) => {
+          acc[cat] = (acc[cat] || 0) + (item[cat as keyof Revenue] as number);
+        });
+        return acc;
+      },
+      {}
+    );
+
+    const processedPieData: PieData[] = activeCategories.map((cat) => ({
+      name: CATEGORY_CONFIG[cat]?.label || cat,
+      value: totals[cat] || 0,
+      color: CATEGORY_CONFIG[cat]?.color || "#000000",
+    }));
+
+    setPieData(processedPieData);
   };
 
-  if (loading) {
-    return (
-      <div className="grid gap-4 md:grid-cols-2">
-        <Card>
-          <CardHeader>
-            <CardTitle>Trend Incassi - Ultimi 30 Giorni</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="h-64 flex items-center justify-center">
-              <div className="animate-pulse text-gray-500">Caricamento...</div>
-            </div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader>
-            <CardTitle>Ripartizione per Categoria</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="h-64 flex items-center justify-center">
-              <div className="animate-pulse text-gray-500">Caricamento...</div>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-    );
-  }
-
+  const activeColors = activeCategories.map(cat => CATEGORY_CONFIG[cat]?.tremorColor || "blue");
+  
   const CustomTooltip = ({ active, payload, label }: TooltipProps) => {
     if (active && payload && payload.length) {
       const data = payload[0].payload;
@@ -169,7 +133,7 @@ export function RevenueCharts() {
                 <span className="text-gray-500 dark:text-gray-400 capitalize text-xs">
                   {item.category === "total" ? "Totale" : item.category}:
                 </span>
-                <span className="font-medium text-gray-900 dark:text-gray-50">
+                <span className="font-medium text-gray-900 dark:text-gray-200">
                   €{Intl.NumberFormat("us").format(item.value)}
                 </span>
               </div>
@@ -185,7 +149,7 @@ export function RevenueCharts() {
     <div className="grid gap-4 md:grid-cols-2">
       <Card>
         <CardHeader>
-          <CardTitle>Trend Incassi - Ultimi 30 Giorni</CardTitle>
+          <CardTitle>Trend Incassi - {periodLabel}</CardTitle>
         </CardHeader>
         <CardContent>
           <AreaChart
@@ -213,18 +177,18 @@ export function RevenueCharts() {
             data={pieData}
             category="name"
             value="value"
-            colors={["blue", "emerald", "amber", "pink", "violet"]}
+            colors={activeColors as any}
             valueFormatter={(number: number) =>
               `€${Intl.NumberFormat("us").format(number).toString()}`
             }
-            className="h-[300px]"
+            className="h-[200px]"
           />
         </CardContent>
       </Card>
 
       <Card className="md:col-span-2">
         <CardHeader>
-          <CardTitle>Confronto Categorie - Ultimi 30 Giorni</CardTitle>
+          <CardTitle>Confronto Categorie - {periodLabel}</CardTitle>
         </CardHeader>
         <CardContent>
           <ComboChart
@@ -233,14 +197,8 @@ export function RevenueCharts() {
             enableBiaxial={true}
             barSeries={{
               type: "stacked",
-              categories: [
-                "biliardi",
-                "bowling_time",
-                "bowling_game",
-                "bar",
-                "calcetto",
-              ],
-              colors: ["blue", "emerald", "amber", "pink", "violet"],
+              categories: activeCategories,
+              colors: activeColors as any,
               valueFormatter: (number: number) =>
                 `€${Intl.NumberFormat("us").format(number).toString()}`,
             }}

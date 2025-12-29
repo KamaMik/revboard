@@ -11,6 +11,7 @@ import {
   format,
   startOfMonth,
   startOfYear,
+  subDays,
 } from "date-fns";
 
 async function getDashboardData() {
@@ -20,6 +21,7 @@ async function getDashboardData() {
     const monthEnd = format(endOfMonth(new Date()), "yyyy-MM-dd");
     const yearStart = format(startOfYear(new Date()), "yyyy-MM-dd");
     const yearEnd = format(endOfYear(new Date()), "yyyy-MM-dd");
+    const thirtyDaysAgo = format(subDays(new Date(), 30), "yyyy-MM-dd");
 
     // Get today's data
     const client = await createClient();
@@ -27,7 +29,7 @@ async function getDashboardData() {
       .from("incassi")
       .select("*")
       .eq("data", today)
-      .single();
+      .maybeSingle();
 
     // Get monthly data
     const { data: monthlyData } = await client
@@ -42,6 +44,13 @@ async function getDashboardData() {
       .select("*")
       .gte("data", yearStart)
       .lte("data", yearEnd);
+
+    // Get last 30 days data for charts
+    const { data: chartData } = await client
+      .from("incassi")
+      .select("*")
+      .gte("data", thirtyDaysAgo)
+      .order("data", { ascending: true });
 
     const dailyTotal = todayData
       ? todayData.biliardi +
@@ -78,25 +87,32 @@ async function getDashboardData() {
     const weeklyAverage = monthlyTotal / 30; // Approximate
 
     return {
-      dailyTotal,
-      monthlyTotal,
-      yearlyTotal,
-      weeklyAverage,
+      kpi: {
+        dailyTotal,
+        monthlyTotal,
+        yearlyTotal,
+        weeklyAverage,
+      },
+      chartData: chartData || [],
     };
   } catch (error) {
     console.error("Error loading dashboard data:", error);
     return {
-      dailyTotal: 0,
-      monthlyTotal: 0,
-      yearlyTotal: 0,
-      weeklyAverage: 0,
+      kpi: {
+        dailyTotal: 0,
+        monthlyTotal: 0,
+        yearlyTotal: 0,
+        weeklyAverage: 0,
+      },
+      chartData: [],
     };
   }
 }
 
 export default async function DashboardPage() {
   // Fetch dashboard data
-  const kpiData = await getDashboardData();
+  const { kpi, chartData } = await getDashboardData();
+  const allCategories = ["biliardi", "bowling_time", "bowling_game", "bar", "calcetto"];
 
   return (
     <div className="min-h-screen bg-slate-100 dark:bg-gray-900">
@@ -112,8 +128,12 @@ export default async function DashboardPage() {
 
         <div className="grid gap-8 lg:grid-cols-3 max-w-7xl">
           <div className="lg:col-span-2 space-y-8">
-            <KPICards data={kpiData} />
-            <RevenueCharts />
+            <KPICards data={kpi} />
+            <RevenueCharts 
+              data={chartData} 
+              periodLabel="Ultimi 30 Giorni" 
+              activeCategories={allCategories} 
+            />
           </div>
 
           <div className="lg:col-span-1">

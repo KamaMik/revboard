@@ -491,8 +491,8 @@ const ChartTooltip = ({
               // base
               "font-medium",
               // text color
-              "text-gray-900 dark:text-gray-50",
-            )}
+          "text-gray-900 dark:text-gray-200",
+        )}
           >
             {label}
           </p>
@@ -538,8 +538,8 @@ const ChartTooltip = ({
                     // base
                     "text-right font-medium whitespace-nowrap tabular-nums",
                     // text color
-                    "text-gray-900 dark:text-gray-50",
-                  )}
+          "text-gray-900 dark:text-gray-200",
+        )}
                 >
                   {chartType === "bar"
                     ? barValueFormatter(value)
@@ -822,7 +822,7 @@ const ComboChart = React.forwardRef<HTMLDivElement, ComboChartProps>(
                 // base
                 "mt-4 text-xs",
                 // text fill
-                "fill-gray-500 dark:fill-gray-200",
+                "fill-gray-500 dark:fill-gray-300",
               )}
               tickLine={false}
               axisLine={false}
@@ -861,7 +861,7 @@ const ComboChart = React.forwardRef<HTMLDivElement, ComboChartProps>(
                 // base
                 "text-xs",
                 // text fill
-                "fill-gray-500 dark:fill-gray-200",
+                "fill-gray-500 dark:fill-gray-300",
               )}
               tick={{
                 transform: "translate(-3, 0)",
@@ -898,7 +898,7 @@ const ComboChart = React.forwardRef<HTMLDivElement, ComboChartProps>(
                   // base
                   "text-xs",
                   // text fill
-                  "fill-gray-500 dark:fill-gray-200",
+                  "fill-gray-500 dark:fill-gray-300",
                 )}
                 tick={{
                   transform: "translate(3, 0)",

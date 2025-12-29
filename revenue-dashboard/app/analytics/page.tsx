@@ -7,6 +7,16 @@ import { Revenue } from "@/lib/supabase";
 import { format } from "date-fns";
 import { useEffect, useState } from "react";
 
+const PRESET_LABELS: Record<string, string> = {
+  today: "Oggi",
+  last7days: "Ultimi 7 giorni",
+  last30days: "Ultimi 30 giorni",
+  thisMonth: "Questo mese",
+  lastMonth: "Mese scorso",
+  thisYear: "Questo anno",
+  custom: "Periodo personalizzato",
+};
+
 export default function AnalyticsPage() {
   const [filters, setFilters] = useState<FilterState>({
     dateFrom: format(new Date(new Date().getFullYear(), 0, 1), "yyyy-MM-dd"),
@@ -20,6 +30,7 @@ export default function AnalyticsPage() {
     yearlyTotal: 0,
     weeklyAverage: 0,
   });
+  const [chartData, setChartData] = useState<Revenue[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -38,6 +49,8 @@ export default function AnalyticsPage() {
 
       if (res.ok && json?.data) {
         const data: Revenue[] = json.data;
+        setChartData(data);
+
         const filteredData = data.map((item: Revenue) => {
           const filteredItem: any = { data: item.data };
           currentFilters.categories.forEach((category) => {
@@ -104,7 +117,11 @@ export default function AnalyticsPage() {
             ) : (
               <>
                 <KPICards data={kpiData} />
-                <RevenueCharts />
+                <RevenueCharts 
+                  data={chartData} 
+                  activeCategories={filters.categories}
+                  periodLabel={PRESET_LABELS[filters.preset] || "Periodo selezionato"}
+                />
               </>
             )}
           </div>

@@ -37,10 +37,10 @@ const PRESETS = [
 
 export function Filters({ onFiltersChange }: FiltersProps) {
   const [filters, setFilters] = useState<FilterState>({
-    dateFrom: format(subDays(new Date(), 30), "yyyy-MM-dd"),
+    dateFrom: format(new Date(new Date().getFullYear(), 0, 1), "yyyy-MM-dd"),
     dateTo: format(new Date(), "yyyy-MM-dd"),
     categories: CATEGORIES.map((cat) => cat.id),
-    preset: "last30days",
+    preset: "thisYear",
   });
 
   const handlePresetChange = (preset: string) => {

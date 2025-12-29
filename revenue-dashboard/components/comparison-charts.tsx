@@ -121,6 +121,31 @@ export function ComparisonCharts({ periodA, periodB }: PeriodComparisonProps) {
     );
   }
 
+  const CustomTooltip = ({ active, payload, label }: any) => {
+    if (active && payload && payload.length) {
+      return (
+        <div className="rounded-md border border-gray-200 bg-white p-3 shadow-md dark:border-gray-800 dark:bg-gray-950 text-sm">
+          <p className="font-medium text-gray-900 dark:text-gray-200 mb-2 border-b border-gray-100 dark:border-gray-800 pb-1">
+            {label}
+          </p>
+          <div className="space-y-1">
+            {payload.map((item: any, index: number) => (
+              <div key={index} className="flex items-center justify-between gap-4">
+                <span className="text-gray-500 dark:text-gray-400 capitalize text-xs">
+                  {item.name}:
+                </span>
+                <span className="font-medium text-gray-900 dark:text-gray-200">
+                  {item.value !== undefined ? `€${Number(item.value).toFixed(2)}` : ""}
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+      );
+    }
+    return null;
+  };
+
   return (
     <div className="space-y-6">
       {/* Summary Cards */}
@@ -130,7 +155,7 @@ export function ComparisonCharts({ periodA, periodB }: PeriodComparisonProps) {
             <CardTitle>Totale {periodA.label}</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-blue-600">
+            <div className="text-2xl font-bold text-blue-600 dark:text-blue-400">
               €
               {comparisonData
                 .reduce((sum, item) => sum + item.periodA, 0)
@@ -144,7 +169,7 @@ export function ComparisonCharts({ periodA, periodB }: PeriodComparisonProps) {
             <CardTitle>Totale {periodB.label}</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-green-600">
+            <div className="text-2xl font-bold text-green-600 dark:text-green-400">
               €
               {comparisonData
                 .reduce((sum, item) => sum + item.periodB, 0)
@@ -164,8 +189,8 @@ export function ComparisonCharts({ periodA, periodB }: PeriodComparisonProps) {
                   (sum, item) => sum + item.difference,
                   0
                 ) >= 0
-                  ? "text-green-600"
-                  : "text-red-600"
+                  ? "text-green-600 dark:text-green-400"
+                  : "text-red-600 dark:text-red-400"
               }`}
             >
               €
@@ -179,8 +204,8 @@ export function ComparisonCharts({ periodA, periodB }: PeriodComparisonProps) {
                   (sum, item) => sum + item.percentage,
                   0
                 ) >= 0
-                  ? "text-green-600"
-                  : "text-red-600"
+                  ? "text-green-600 dark:text-green-400"
+                  : "text-red-600 dark:text-red-400"
               }`}
             >
               {comparisonData
@@ -200,16 +225,17 @@ export function ComparisonCharts({ periodA, periodB }: PeriodComparisonProps) {
         <CardContent>
           <ResponsiveContainer width="100%" height={400}>
             <BarChart data={comparisonData}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="category" />
-              <YAxis />
-              <Tooltip formatter={(value) => [`€${value}`, ""]} />
+              <CartesianGrid strokeDasharray="3 3" className="stroke-gray-200 dark:stroke-gray-800" />
+              <XAxis dataKey="category" className="text-xs fill-gray-500 dark:fill-gray-200" />
+              <YAxis className="text-xs fill-gray-500 dark:fill-gray-200" />
+              <Tooltip content={<CustomTooltip />} />
               <Legend />
               <Bar dataKey="periodA" fill="#3b82f6" name={periodA.label}>
                 <LabelList
                   dataKey="periodA"
                   position="top"
                   formatter={(value: any) => `€${Number(value).toFixed(0)}`}
+                  className="fill-gray-900 dark:fill-gray-300 text-xs"
                 />
               </Bar>
               <Bar dataKey="periodB" fill="#10b981" name={periodB.label}>
@@ -217,6 +243,7 @@ export function ComparisonCharts({ periodA, periodB }: PeriodComparisonProps) {
                   dataKey="periodB"
                   position="top"
                   formatter={(value: any) => `€${Number(value).toFixed(0)}`}
+                  className="fill-gray-900 dark:fill-gray-300 text-xs"
                 />
               </Bar>
             </BarChart>
@@ -232,10 +259,10 @@ export function ComparisonCharts({ periodA, periodB }: PeriodComparisonProps) {
         <CardContent>
           <ResponsiveContainer width="100%" height={300}>
             <LineChart data={comparisonData}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="category" />
-              <YAxis />
-              <Tooltip formatter={(value) => [`€${value}`, "Differenza"]} />
+              <CartesianGrid strokeDasharray="3 3" className="stroke-gray-200 dark:stroke-gray-800" />
+              <XAxis dataKey="category" className="text-xs fill-gray-500 dark:fill-gray-200" />
+              <YAxis className="text-xs fill-gray-500 dark:fill-gray-200" />
+              <Tooltip content={<CustomTooltip />} />
               <Legend />
               <Line
                 type="monotone"
@@ -253,6 +280,7 @@ export function ComparisonCharts({ periodA, periodB }: PeriodComparisonProps) {
                   dataKey="difference"
                   position="top"
                   formatter={(value: any) => `€${Number(value).toFixed(0)}`}
+                  className="fill-gray-900 dark:fill-gray-300 text-xs"
                 />
               </Line>
             </LineChart>
