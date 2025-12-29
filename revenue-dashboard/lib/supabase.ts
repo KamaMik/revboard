@@ -6,6 +6,7 @@ export type Revenue = {
   bowling_game: number;
   bar: number;
   calcetto: number;
+  video_games: number;
   created_at: string;
   weather_temperature?: number;
   weather_description?: string;

@@ -23,6 +23,7 @@ export function RevenueForm({ onSuccess, selectedDate }: RevenueFormProps) {
     bowling_game: 0,
     bar: 0,
     calcetto: 0,
+    video_games: 0,
   });
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
@@ -51,6 +52,7 @@ export function RevenueForm({ onSuccess, selectedDate }: RevenueFormProps) {
           bowling_game: data.bowling_game,
           bar: data.bar,
           calcetto: data.calcetto,
+          video_games: data.video_games || 0,
           weather_temperature: data.weather_temperature,
           weather_description: data.weather_description,
           weather_icon: data.weather_icon,
@@ -70,6 +72,7 @@ export function RevenueForm({ onSuccess, selectedDate }: RevenueFormProps) {
           bowling_game: 0,
           bar: 0,
           calcetto: 0,
+          video_games: 0,
           weather_temperature: weatherData?.weather_temperature,
           weather_description: weatherData?.weather_description,
           weather_icon: weatherData?.weather_icon,
@@ -131,7 +134,8 @@ export function RevenueForm({ onSuccess, selectedDate }: RevenueFormProps) {
     formData.bowling_time +
     formData.bowling_game +
     formData.bar +
-    formData.calcetto;
+    formData.calcetto +
+    (formData.video_games || 0);
 
   return (
     <Card className="w-full max-w-2xl mx-auto shadow-lg">
@@ -267,6 +271,20 @@ export function RevenueForm({ onSuccess, selectedDate }: RevenueFormProps) {
                 step="0.01"
                 value={formData.calcetto || ""}
                 onChange={(e) => handleInputChange("calcetto", e.target.value)}
+                className="w-full"
+                min="0"
+                placeholder="0.00"
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="video_games">Video Games (€)</Label>
+              <Input
+                id="video_games"
+                type="number"
+                step="0.01"
+                value={formData.video_games || ""}
+                onChange={(e) => handleInputChange("video_games", e.target.value)}
                 className="w-full"
                 min="0"
                 placeholder="0.00"

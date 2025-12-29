@@ -17,6 +17,7 @@ interface ChartData {
   bowling_game: number;
   bar: number;
   calcetto: number;
+  video_games: number;
   weather_description?: string;
   weather_temperature?: number;
   weather_icon?: string;
@@ -41,6 +42,7 @@ const CATEGORY_CONFIG: Record<string, { label: string; color: string; tremorColo
   bowling_game: { label: "Bowling Game", color: "#f59e0b", tremorColor: "amber" },
   bar: { label: "Bar", color: "#ef4444", tremorColor: "pink" },
   calcetto: { label: "Calcetto", color: "#8b5cf6", tremorColor: "violet" },
+  video_games: { label: "Video Games", color: "#ec4899", tremorColor: "pink" },
 };
 
 export function RevenueCharts({ data, periodLabel, activeCategories }: RevenueChartsProps) {

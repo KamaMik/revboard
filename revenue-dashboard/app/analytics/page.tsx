@@ -21,7 +21,7 @@ export default function AnalyticsPage() {
   const [filters, setFilters] = useState<FilterState>({
     dateFrom: format(new Date(new Date().getFullYear(), 0, 1), "yyyy-MM-dd"),
     dateTo: format(new Date(), "yyyy-MM-dd"),
-    categories: ["biliardi", "bowling_time", "bowling_game", "bar", "calcetto"],
+    categories: ["biliardi", "bowling_time", "bowling_game", "bar", "calcetto", "video_games"],
     preset: "thisYear",
   });
   const [kpiData, setKpiData] = useState({

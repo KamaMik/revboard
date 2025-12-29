@@ -23,6 +23,7 @@ const CATEGORIES = [
   { id: "bowling_game", label: "Bowling Game" },
   { id: "bar", label: "Bar" },
   { id: "calcetto", label: "Calcetto" },
+  { id: "video_games", label: "Video Games" },
 ];
 
 const PRESETS = [
@@ -100,7 +101,7 @@ export function Filters({ onFiltersChange }: FiltersProps) {
 
         {/* Date Presets */}
         <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">
             Periodo Predefinito
           </label>
           <div className="flex flex-wrap gap-2">
@@ -127,7 +128,7 @@ export function Filters({ onFiltersChange }: FiltersProps) {
           <div>
             <label
               htmlFor="dateFrom"
-              className="block text-sm font-medium text-gray-700 mb-2"
+              className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2"
             >
               Dal
             </label>
@@ -140,7 +141,7 @@ export function Filters({ onFiltersChange }: FiltersProps) {
           <div>
             <label
               htmlFor="dateTo"
-              className="block text-sm font-medium text-gray-700 mb-2"
+              className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2"
             >
               Al
             </label>
@@ -154,7 +155,7 @@ export function Filters({ onFiltersChange }: FiltersProps) {
 
         {/* Category Filters */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">
             Categorie
           </label>
           <div className="grid grid-cols-2 md:grid-cols-3 gap-2">

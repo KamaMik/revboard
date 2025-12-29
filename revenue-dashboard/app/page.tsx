@@ -57,7 +57,8 @@ async function getDashboardData() {
         todayData.bowling_time +
         todayData.bowling_game +
         todayData.bar +
-        todayData.calcetto
+        todayData.calcetto +
+        (todayData.video_games || 0)
       : 0;
 
     const monthlyTotal =
@@ -68,7 +69,8 @@ async function getDashboardData() {
           item.bowling_time +
           item.bowling_game +
           item.bar +
-          item.calcetto,
+          item.calcetto +
+          (item.video_games || 0),
         0
       ) || 0;
 
@@ -80,7 +82,8 @@ async function getDashboardData() {
           item.bowling_time +
           item.bowling_game +
           item.bar +
-          item.calcetto,
+          item.calcetto +
+          (item.video_games || 0),
         0
       ) || 0;
 
@@ -112,7 +115,7 @@ async function getDashboardData() {
 export default async function DashboardPage() {
   // Fetch dashboard data
   const { kpi, chartData } = await getDashboardData();
-  const allCategories = ["biliardi", "bowling_time", "bowling_game", "bar", "calcetto"];
+  const allCategories = ["biliardi", "bowling_time", "bowling_game", "bar", "calcetto", "video_games"];
 
   return (
     <div className="min-h-screen bg-slate-100 dark:bg-gray-900">

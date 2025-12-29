@@ -20,6 +20,7 @@ import {
 
 interface ComparisonData {
   category: string;
+  categoryId: string;
   periodA: number;
   periodB: number;
   difference: number;
@@ -64,6 +65,7 @@ export function ComparisonCharts({ periodA, periodB }: PeriodComparisonProps) {
         "bowling_game",
         "bar",
         "calcetto",
+        "video_games",
       ];
       const categoryLabels = {
         biliardi: "Biliardi",
@@ -71,6 +73,16 @@ export function ComparisonCharts({ periodA, periodB }: PeriodComparisonProps) {
         bowling_game: "Bowling Game",
         bar: "Bar",
         calcetto: "Calcetto",
+        video_games: "Video Games",
+      };
+
+      const categoryColors = {
+        biliardi: "bg-blue-100 dark:bg-blue-900/20",
+        bowling_time: "bg-emerald-100 dark:bg-emerald-900/20",
+        bowling_game: "bg-amber-100 dark:bg-amber-900/20",
+        bar: "bg-red-100 dark:bg-red-900/20",
+        calcetto: "bg-violet-100 dark:bg-violet-900/20",
+        video_games: "bg-pink-100 dark:bg-pink-900/20",
       };
 
       const comparisonData: ComparisonData[] = categories.map((category) => {
@@ -89,6 +101,7 @@ export function ComparisonCharts({ periodA, periodB }: PeriodComparisonProps) {
 
         return {
           category: categoryLabels[category as keyof typeof categoryLabels],
+          categoryId: category,
           periodA: totalA,
           periodB: totalB,
           difference,
@@ -317,14 +330,21 @@ export function ComparisonCharts({ periodA, periodB }: PeriodComparisonProps) {
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
                 {comparisonData.map((item, index) => (
-                  <tr key={index}>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                  <tr key={index} className={
+                    item.categoryId === "biliardi" ? "bg-blue-50 dark:bg-blue-900/30" :
+                    item.categoryId === "bowling_time" ? "bg-emerald-50 dark:bg-emerald-900/30" :
+                    item.categoryId === "bowling_game" ? "bg-amber-50 dark:bg-amber-900/30" :
+                    item.categoryId === "bar" ? "bg-red-50 dark:bg-red-900/30" :
+                    item.categoryId === "calcetto" ? "bg-violet-50 dark:bg-violet-900/30" :
+                    item.categoryId === "video_games" ? "bg-pink-50 dark:bg-pink-900/30" : ""
+                  }>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-700">
                       {item.category}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-700">
                       €{item.periodA.toFixed(2)}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-700">
                       €{item.periodB.toFixed(2)}
                     </td>
                     <td
