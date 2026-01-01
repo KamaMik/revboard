@@ -6,7 +6,7 @@ import {
   ChevronLeftIcon,
   ChevronRightIcon,
 } from "lucide-react"
-import { DayButton, DayPicker, getDefaultClassNames } from "react-day-picker"
+import { DayButton, DayPicker, getDefaultClassNames, useDayPicker } from "react-day-picker"
 
 import { cn } from "@/lib/utils"
 import { Button, buttonVariants } from "@/components/ui/button"
@@ -15,7 +15,7 @@ function Calendar({
   className,
   classNames,
   showOutsideDays = true,
-  captionLayout = "label",
+  captionLayout = "dropdown",
   buttonVariant = "ghost",
   formatters,
   components,
@@ -24,9 +24,11 @@ function Calendar({
   buttonVariant?: React.ComponentProps<typeof Button>["variant"]
 }) {
   const defaultClassNames = getDefaultClassNames()
+  const [navView, setNavView] = React.useState<"days" | "years">("days")
 
   return (
     <DayPicker
+      key={navView}
       showOutsideDays={showOutsideDays}
       className={cn(
         "bg-background group/calendar p-3 [--cell-size:2.5rem] [[data-slot=card-content]_&]:bg-transparent [[data-slot=popover-content]_&]:bg-transparent",
@@ -49,7 +51,8 @@ function Calendar({
         month: cn("flex w-full flex-col gap-4", defaultClassNames.month),
         nav: cn(
           "absolute inset-x-0 top-0 flex w-full items-center justify-between gap-1",
-          defaultClassNames.nav
+          defaultClassNames.nav,
+          navView === "years" && "hidden"
         ),
         button_previous: cn(
           buttonVariants({ variant: buttonVariant }),
@@ -70,18 +73,18 @@ function Calendar({
           defaultClassNames.dropdowns
         ),
         dropdown_root: cn(
-          "has-focus:border-ring border-input shadow-xs has-focus:ring-ring/50 has-focus:ring-[3px] relative rounded-md border",
+          "has-focus:border-ring border-input shadow-xs has-focus:ring-ring/50 has-focus:ring-[3px] relative rounded-md border w-32",
           defaultClassNames.dropdown_root
         ),
         dropdown: cn(
-          "bg-transparent cursor-pointer p-1 text-sm outline-none",
+          "bg-transparent cursor-pointer p-1 text-sm outline-none w-full",
           defaultClassNames.dropdown
         ),
         caption_label: cn(
           "select-none font-bold text-lg",
           captionLayout === "label"
             ? "text-lg"
-            : "[&>svg]:text-muted-foreground flex h-8 items-center gap-1 rounded-md pl-2 pr-1 text-sm [&>svg]:size-3.5",
+            : "[&>svg]:text-muted-foreground flex h-8 items-center justify-between gap-1 rounded-md pl-2 pr-1 text-sm [&>svg]:size-3.5 w-full",
           defaultClassNames.caption_label
         ),
         table: "w-full border-collapse",
@@ -125,20 +128,20 @@ function Calendar({
         ...classNames,
       }}
       components={{
-        Root: ({ className, rootRef, ...props }) => {
+        Root: ({ className, rootRef, ...rootProps }: any) => {
           return (
             <div
               data-slot="calendar"
               ref={rootRef}
               className={cn(className)}
-              {...props}
+              {...rootProps}
             />
           )
         },
-        Chevron: ({ className, orientation, ...props }) => {
+        Chevron: ({ className, orientation, ...chevronProps }: any) => {
           if (orientation === "left") {
             return (
-              <ChevronLeftIcon className={cn("size-4", className)} {...props} />
+              <ChevronLeftIcon className={cn("size-4", className)} {...chevronProps} />
             )
           }
 
@@ -146,19 +149,101 @@ function Calendar({
             return (
               <ChevronRightIcon
                 className={cn("size-4", className)}
-                {...props}
+                {...chevronProps}
               />
             )
           }
 
           return (
-            <ChevronDownIcon className={cn("size-4", className)} {...props} />
+            <ChevronDownIcon className={cn("size-4", className)} {...chevronProps} />
           )
         },
         DayButton: CalendarDayButton,
-        WeekNumber: ({ children, ...props }) => {
+        CaptionLabel: (captionProps: any) => (
+          <Button
+            variant="ghost"
+            className="h-auto p-1 font-bold text-lg hover:bg-accent hover:text-accent-foreground cursor-pointer z-50 relative"
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              setNavView(prev => prev === "days" ? "years" : "days")
+            }}
+            type="button"
+          >
+            {captionProps.children}
+          </Button>
+        ),
+        Table: (tableProps: any) => {
+          const { goToMonth, months } = useDayPicker();
+          const currentMonth = months?.[0]?.date || new Date();
+          
+          if (navView === "years") {
+            // Generate years range
+            const currentYear = new Date().getFullYear();
+            const startYear = (props as any).fromYear || (props as any).fromDate?.getFullYear() || 2015;
+            const endYear = (props as any).toYear || (props as any).toDate?.getFullYear() || currentYear + 5;
+            
+            const years = [];
+            for (let y = startYear; y <= endYear; y++) {
+              years.push(y);
+            }
+
+            return (
+              <div className="flex flex-col gap-4 p-2 w-full">
+                <div className="grid grid-cols-4 gap-2 max-h-[180px] overflow-y-auto w-full border-b pb-2">
+                  {years.map((year) => (
+                    <Button
+                      key={year}
+                      variant={year === currentMonth.getFullYear() ? "default" : "ghost"}
+                      size="sm"
+                      className={cn(
+                          "h-7 text-xs",
+                          year === new Date().getFullYear() && "text-blue-500 font-bold"
+                      )}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        const newDate = new Date(currentMonth);
+                        newDate.setFullYear(year);
+                        goToMonth(newDate);
+                      }}
+                      type="button"
+                    >
+                      {year}
+                    </Button>
+                  ))}
+                </div>
+                <div className="grid grid-cols-3 gap-2">
+                  {Array.from({ length: 12 }, (_, i) => i).map((monthIndex) => (
+                    <Button
+                      key={monthIndex}
+                      variant={monthIndex === currentMonth.getMonth() ? "default" : "ghost"}
+                      size="sm"
+                      className="h-7 text-xs"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        const newDate = new Date(currentMonth);
+                        newDate.setMonth(monthIndex);
+                        goToMonth(newDate);
+                        setNavView("days");
+                      }}
+                      type="button"
+                    >
+                      {new Date(2000, monthIndex, 1).toLocaleString("default", { month: "short" })}
+                    </Button>
+                  ))}
+                </div>
+              </div>
+            );
+          }
           return (
-            <td {...props}>
+            <table className={cn("w-full border-collapse", tableProps.className)} {...tableProps} />
+          )
+        },
+        WeekNumber: ({ children, ...weekProps }: any) => {
+          return (
+            <td {...weekProps}>
               <div className="flex size-[--cell-size] items-center justify-center text-center">
                 {children}
               </div>
@@ -166,11 +251,12 @@ function Calendar({
           )
         },
         ...components,
-      }}
+      } as any}
       {...props}
     />
   )
 }
+Calendar.displayName = "Calendar"
 
 function CalendarDayButton({
   className,

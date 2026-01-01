@@ -38,7 +38,7 @@ export function DatePicker({ id, value, onChange, className }: DatePickerProps) 
           {date ? <span className="truncate">{format(date, "PPP")}</span> : <span>Pick a date</span>}
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-auto p-4 min-w-[320px] sm:min-w-[400px]" align="start">
+      <PopoverContent className="w-auto p-4 min-w-[320px] sm:min-w-[400px] max-h-[420px] overflow-y-auto" align="start">
         <Calendar
           mode="single"
           selected={date}
@@ -47,7 +47,6 @@ export function DatePicker({ id, value, onChange, className }: DatePickerProps) 
             setOpen(false);
           }}
           initialFocus
-          captionLayout="dropdown"
           fromYear={2015}
           toYear={new Date().getFullYear() + 1}
           className="[--cell-size:3.5rem] w-full max-w-none"
@@ -56,4 +55,3 @@ export function DatePicker({ id, value, onChange, className }: DatePickerProps) 
     </Popover>
   );
 }
-
