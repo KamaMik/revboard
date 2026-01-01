@@ -21,6 +21,7 @@ const navigation = [
   { name: "Dashboard", href: "/", icon: BarChart3 },
   { name: "Analisi", href: "/analytics", icon: TrendingUp },
   { name: "Confronto", href: "/comparazione", icon: PlusCircle },
+  { name: "Statistiche", href: "/statistiche", icon: BarChart3 },
 ];
 
 export function SidebarNav() {
