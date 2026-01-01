@@ -1,4 +1,4 @@
-import { login, signup } from './actions'
+import { login } from './actions'
 
 export default async function LoginPage({
   searchParams,
@@ -52,18 +52,12 @@ export default async function LoginPage({
             </div>
           </div>
 
-          <div className="flex gap-4">
+          <div>
             <button
               formAction={login}
               className="group relative flex w-full justify-center rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
             >
               Accedi
-            </button>
-            <button
-              formAction={signup}
-              className="group relative flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-blue-600 ring-1 ring-inset ring-blue-600 hover:bg-gray-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
-            >
-              Registrati
             </button>
           </div>
         </form>

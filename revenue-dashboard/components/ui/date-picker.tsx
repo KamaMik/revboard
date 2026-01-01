@@ -47,6 +47,9 @@ export function DatePicker({ id, value, onChange, className }: DatePickerProps) 
             setOpen(false);
           }}
           initialFocus
+          captionLayout="dropdown"
+          fromYear={2015}
+          toYear={new Date().getFullYear() + 1}
           className="[--cell-size:3.5rem] w-full max-w-none"
         />
       </PopoverContent>
