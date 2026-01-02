@@ -61,6 +61,13 @@ export function KPICards({ data }: KPICardsProps) {
         icon={<DollarSign className="h-4 w-4 text-muted-foreground" />}
       />
       <KPICard
+        title="Media Settimanale"
+        value={`€${data.weeklyAverage.toFixed(2)}`}
+        change="+5% vs settimana scorsa"
+        changeType="positive"
+        icon={<TrendingUp className="h-4 w-4 text-muted-foreground" />}
+      />
+      <KPICard
         title="Totale Mensile"
         value={`€${data.monthlyTotal.toFixed(2)}`}
         change="+8% vs mese scorso"
@@ -71,13 +78,6 @@ export function KPICards({ data }: KPICardsProps) {
         title="Totale Annuale"
         value={`€${data.yearlyTotal.toFixed(2)}`}
         change="+15% vs anno scorso"
-        changeType="positive"
-        icon={<TrendingUp className="h-4 w-4 text-muted-foreground" />}
-      />
-      <KPICard
-        title="Media Settimanale"
-        value={`€${data.weeklyAverage.toFixed(2)}`}
-        change="+5% vs settimana scorsa"
         changeType="positive"
         icon={<TrendingUp className="h-4 w-4 text-muted-foreground" />}
       />
