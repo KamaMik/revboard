@@ -204,6 +204,20 @@ export function RevenueForm({ onSuccess, selectedDate }: RevenueFormProps) {
             )}
             
             <div className="space-y-2">
+              <Label htmlFor="bar">Bar (€)</Label>
+              <Input
+                id="bar"
+                type="number"
+                step="0.01"
+                value={formData.bar || ""}
+                onChange={(e) => handleInputChange("bar", e.target.value)}
+                className="w-full"
+                min="0"
+                placeholder="0.00"
+              />
+            </div>
+
+            <div className="space-y-2">
               <Label htmlFor="biliardi">Biliardi (€)</Label>
               <Input
                 id="biliardi"
@@ -250,13 +264,13 @@ export function RevenueForm({ onSuccess, selectedDate }: RevenueFormProps) {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="bar">Bar (€)</Label>
+              <Label htmlFor="video_games">Video Games (€)</Label>
               <Input
-                id="bar"
+                id="video_games"
                 type="number"
                 step="0.01"
-                value={formData.bar || ""}
-                onChange={(e) => handleInputChange("bar", e.target.value)}
+                value={formData.video_games || ""}
+                onChange={(e) => handleInputChange("video_games", e.target.value)}
                 className="w-full"
                 min="0"
                 placeholder="0.00"
@@ -271,20 +285,6 @@ export function RevenueForm({ onSuccess, selectedDate }: RevenueFormProps) {
                 step="0.01"
                 value={formData.calcetto || ""}
                 onChange={(e) => handleInputChange("calcetto", e.target.value)}
-                className="w-full"
-                min="0"
-                placeholder="0.00"
-              />
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="video_games">Video Games (€)</Label>
-              <Input
-                id="video_games"
-                type="number"
-                step="0.01"
-                value={formData.video_games || ""}
-                onChange={(e) => handleInputChange("video_games", e.target.value)}
                 className="w-full"
                 min="0"
                 placeholder="0.00"
